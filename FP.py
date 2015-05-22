@@ -73,7 +73,7 @@ def up(event):
 
 def kill(event):
     root.destroy()
-    asdaa
+    
 root.bind('<a>',up)
 root.bind('<s>',up)
 root.bind('<d>',up)
