@@ -28,11 +28,9 @@ global rate
 global speed
 global spawnrate
 global gravity
-global high
 rate = 1
 
 
-high = -20
 speed = -5
 spawnrate = 900
 gravity = .5
@@ -58,16 +56,13 @@ def fall_loop():
     global speed
     global spawnrate
     global gravity
-    global high
     
     canvas.move(plane,0,rate)
     canvas.move("tower",speed,0)
      
     rate += gravity
-    speed -= .01
-    spawnrate -= 1
-    high -= .002
-    gravity += .001
+    speed -= .02
+    gravity += .0008
     
     if canvas.coords(plane)[1] >= 500 or canvas.coords(plane)[1] <= 0:
         loss()
@@ -99,10 +94,9 @@ fall_loop()
 
 def up(event):
     global rate
-    global high
     
     rate = 0
-    canvas.move(plane,0,high)
+    canvas.move(plane,0,-20)
     
 
 def kill(event):
@@ -134,6 +128,9 @@ def maketower():
         canvas.delete("delete")
         
         score += .11
+        
+    spawnrate -= 2
+    
 
     
     tower2spawn = initial_height + random.randint(200,300)
