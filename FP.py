@@ -4,6 +4,7 @@ import random
 root = Tk()
 root.title('Flappy Plane')
 root.minsize(800,500)
+root.config(bg='light blue')
 
 canvas = Canvas(root,bg="light blue")
 canvas.config(width=800,height=500)
@@ -15,7 +16,7 @@ towerimg = PhotoImage(file='wtc.gif')
 plane = canvas.create_image(400,200,image=planeimg)
 
 text = Text(root)
-text.config(width=100,height=1)
+text.config(width=100,height=1,bg='light blue')
 text.insert(INSERT,'Score:')
 text.config(state=DISABLED)
 text.pack()
