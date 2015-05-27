@@ -38,6 +38,20 @@ spawnrate = 900
 gravity = .5
 
 
+def loss():
+    root.destroy()
+    
+    loss = Tk()
+    loss.title('You Lost!')
+    loss.config(bg="light blue")
+    
+    l = Label(loss,text='You Lost! %s points!'% int(score),bg='light blue').pack()
+    
+    
+    
+    loss.mainloop()
+
+
 def fall_loop():
     global score
     global rate
@@ -55,6 +69,9 @@ def fall_loop():
     high -= .002
     gravity += .001
     
+    if canvas.coords(plane)[1] >= 500 or canvas.coords(plane)[1] <= 0:
+        loss()
+    
     
     playerbbox = canvas.bbox(plane)
     overlap = canvas.find_overlapping(*playerbbox)
@@ -69,17 +86,9 @@ def fall_loop():
     
     
     if len(overlap) > 1:
-        root.destroy()
         
-        loss = Tk()
-        loss.title('You Lost!')
-        loss.config(bg="light blue")
+        loss()
         
-        l = Label(loss,text='You Lost! %s points!'% int(score),bg='light blue').pack()
-        
-        
-        
-        loss.mainloop()
     
     
     root.after(1,fall_loop)
