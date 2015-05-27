@@ -25,15 +25,36 @@ global score
 score = 0
 
 global rate
+global speed
+global spawnrate
+global gravity
+global high
 rate = 1
+
+
+high = -20
+speed = -5
+spawnrate = 900
+gravity = .5
+
 
 def fall_loop():
     global score
     global rate
+    global speed
+    global spawnrate
+    global gravity
+    global high
     
     canvas.move(plane,0,rate)
-    rate += .5
-    canvas.move("tower",-5,0)
+    canvas.move("tower",speed,0)
+     
+    rate += gravity
+    speed -= .01
+    spawnrate -= 1
+    high -= .002
+    gravity += .001
+    
     
     playerbbox = canvas.bbox(plane)
     overlap = canvas.find_overlapping(*playerbbox)
@@ -52,8 +73,9 @@ def fall_loop():
         
         loss = Tk()
         loss.title('You Lost!')
+        loss.config(bg="light blue")
         
-        l = Label(loss,text='You Lost! %s points!'% int(score)).pack()
+        l = Label(loss,text='You Lost! %s points!'% int(score),bg='light blue').pack()
         
         
         
@@ -68,9 +90,11 @@ fall_loop()
 
 def up(event):
     global rate
+    global high
     
     rate = 0
-    canvas.move(plane,0,-20)
+    canvas.move(plane,0,high)
+    
 
 def kill(event):
     root.destroy()
@@ -80,7 +104,6 @@ root.bind('<s>',up)
 root.bind('<d>',up)
 root.bind('<space>',up)
 
-root.bind('<Up>',kill)
 
 
 
@@ -88,6 +111,7 @@ root.bind('<Up>',kill)
 
 
 def maketower():
+    global spawnrate
     global score
     height = random.randint(0,250)
     initial_height = height
@@ -117,7 +141,7 @@ def maketower():
     
     
     
-    root.after(800,maketower)
+    root.after(spawnrate,maketower)
 
 maketower()
 
