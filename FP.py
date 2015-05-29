@@ -1,5 +1,6 @@
 from Tkinter import *
 import random
+import math
 
 root = Tk()
 root.title('Flappy Plane')
@@ -29,13 +30,46 @@ global rate
 global speed
 global spawnrate
 global gravity
+global key
+global lost
+
 rate = 1
-
-
+lost = False
+key = ''
 speed = -5
 spawnrate = 900
 gravity = .5
 
+
+
+class Encryption(object):
+    def __init__(self,encryptme,decryptme):
+        self.encryptme = encryptme
+        self.decryptme = decryptme
+        
+    def encrypt(self):
+        global key
+        for emptyspace in range(0,10):
+           emptyspace = random.randint(0,9)
+           key += str(emptyspace)
+    
+    
+        score2 = self.encryptme ** 2
+        score3 = str(score2)[::-1]
+ 
+        return str(key) + str(key).join(str(score3))
+    def decrypt(self):
+        tbd = self.decryptme
+        oldkey = (tbd[0]+ tbd[1] + tbd[2] + tbd[3] + tbd[4]+ tbd[5]+ tbd[6]+ tbd[7]+ tbd[8]+ tbd[9])
+        
+        newtbd = tbd.split(oldkey)
+        newtbd = "".join(newtbd)
+
+        decoded = newtbd.split(oldkey)
+        decoded = "".join(decoded)
+        
+        decoded2 = decoded[::-1]
+        return math.sqrt(int(decoded2))
 
 def loss():
     root.destroy()
@@ -44,10 +78,46 @@ def loss():
     loss.title('You Lost!')
     loss.config(bg="light blue")
     
-    l = Label(loss,text='You Lost! %s points!'% int(score),bg='light blue').pack()
+    
+    def highscore_():
+        global score_snapshot
+        with open('flappy_score.txt','r') as read_old_score:
+            
+            decryptsoon = read_old_score.read()
+            doody = Encryption(decryptme=decryptsoon,encryptme="Ignore Me!")
+            highest_score = doody.decrypt()
+            
+            
+            
+            
+           
+        
+        if score_snapshot > float(highest_score):
+            with open('flappy_score.txt','w') as new_high_score:
+                poopy = Encryption(encryptme = int(score_snapshot),decryptme="Ignore Me!")
+                new_high_score.write(poopy.encrypt())
+                
+                
+            
+        
+        encryptedscore = Encryption(encryptme = score, decryptme = "Ignore please!")
     
     
     
+        
+        if score_snapshot > float(highest_score):
+            loser = Label(loss,text="New high score of %s!" % (int(score_snapshot)),bg='light blue')
+            loser.pack()
+        else:
+            loser2 = Label(loss,text="You got a score of %s! Your high score is %s" % (int(score_snapshot),int(highest_score)),bg='light blue')
+            loser2.pack()
+    
+    
+    
+    highscore_()
+   
+   
+   
     loss.mainloop()
 
 
@@ -82,13 +152,18 @@ def fall_loop():
     
     
     if len(overlap) > 1:
+        global score_snapshot
+        global lost
+        
+        lost = True
+        score_snapshot = score
         canvas.create_image(canvas.coords(plane)[0],canvas.coords(plane)[1],image=crashimg)
         canvas.delete(plane)   
 
         root.after(3000,loss)     
     
-    
-    root.after(1,fall_loop)
+    if lost == False:
+        root.after(1,fall_loop)
     
     
 fall_loop()
@@ -118,6 +193,7 @@ root.bind('<space>',up)
 def maketower():
     global spawnrate
     global score
+    global lost
     height = random.randint(0,250)
     initial_height = height
     
@@ -148,8 +224,8 @@ def maketower():
     
     
     
-    
-    root.after(spawnrate,maketower)
+    if lost == False:
+        root.after(spawnrate,maketower)
 
 maketower()
 
