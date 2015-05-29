@@ -12,6 +12,7 @@ canvas.config(width=800,height=500)
 
 planeimg = PhotoImage(file='Jet.gif')
 towerimg = PhotoImage(file='wtc.gif')
+crashimg = PhotoImage(file='Crash.gif')
 
 plane = canvas.create_image(400,200,image=planeimg)
 
@@ -81,9 +82,9 @@ def fall_loop():
     
     
     if len(overlap) > 1:
-        
-        loss()
-        
+        canvas.create_image(canvas.coords(plane)[0],canvas.coords(plane)[0],image=crashimg)
+        canvas.delete(plane)   
+        root.after(5000,loss)     
     
     
     root.after(1,fall_loop)
