@@ -84,6 +84,7 @@ def fall_loop():
     if len(overlap) > 1:
         canvas.create_image(canvas.coords(plane)[0],canvas.coords(plane)[0],image=crashimg)
         canvas.delete(plane)   
+
         root.after(5000,loss)     
     
     
