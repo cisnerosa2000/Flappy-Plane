@@ -194,7 +194,7 @@ def maketower():
     global spawnrate
     global score
     global lost
-    height = random.randint(0,250)
+    height = random.randint(100,250)
     initial_height = height
     
     for num in range(1,10):
